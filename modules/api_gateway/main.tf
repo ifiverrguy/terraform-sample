@@ -13,9 +13,13 @@ resource "aws_api_gateway_method" "example_method" {
   rest_api_id   = aws_api_gateway_rest_api.example.id
   resource_id   = aws_api_gateway_resource.example_root.id
   http_method   = "GET"
+<<<<<<< HEAD
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.lambda_authorizer.id
 
+=======
+  authorization = "NONE"
+>>>>>>> 06e78fc7f9cafbe7b41d767bd00f4add7233d2db
 }
 
 resource "aws_api_gateway_integration" "example_integration" {

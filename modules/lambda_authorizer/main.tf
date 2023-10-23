@@ -65,4 +65,3 @@ resource "aws_lambda_function" "example" {
     variables = var.env_variables
   }
 }
-

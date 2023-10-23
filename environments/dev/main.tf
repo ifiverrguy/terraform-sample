@@ -1,7 +1,3 @@
-provider "aws" {
-  profile                 = "ifeoluwa2008"
-}
-
 module "vpc" {
   source = "../../modules/vpc"
 
