@@ -1,31 +1,3 @@
-locals {
-  app_lambdas = {
-    EnhancedGetVehicleByRegistration = {
-      name       = "EnhancedGetVehicleByRegistration",
-      handler    = "app.handler",
-      memory     = 256,
-      timeout    = 60,
-      env_vars   = {},
-      mts        = true,
-      dva        = true,
-      recalls    = true,
-      cvs        = false,
-      bulk       = false,
-    },
-    GetVehicleBulkDownloadURLs = {
-      name       = "GetVehicleBulkDownloadURLs",
-      handler    = "app.handler",
-      memory     = 256,
-      timeout    = 60,
-      env_vars   = {},
-      mts        = false,
-      dva        = false,
-      recalls    = false,
-      cvs        = false,
-      bulk       = true,
-    }
-  }
-}
 
 
 module "vpc" {
@@ -67,7 +39,7 @@ module "lambda_authorizer" {
 module "lambda_functions" {
   source = "../../modules/lambda_functions"
   lambda_execution_role_arn = module.lambda_authorizer.lambda_execution_role_arn
-  app_lambdas = local.app_lambdas
+  app_lambdas = var.app_lambdas
 }
 
 
@@ -78,7 +50,7 @@ module "api_gateway" {
   lambda_authorizer_arn   = module.lambda_authorizer.lambda_function_arn
   lambda_authorizer_execution_role_arn = module.lambda_authorizer.lambda_execution_role_arn
   lambda_function_uris = module.lambda_functions.lambda_arns
-  app_lambdas = local.app_lambdas
+  app_lambdas  = var.app_lambdas
 }
 
 
