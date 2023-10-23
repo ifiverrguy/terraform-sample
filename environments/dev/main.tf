@@ -1,3 +1,33 @@
+locals {
+  app_lambdas = {
+    EnhancedGetVehicleByRegistration = {
+      name       = "EnhancedGetVehicleByRegistration",
+      handler    = "app.handler",
+      memory     = 256,
+      timeout    = 60,
+      env_vars   = {},
+      mts        = true,
+      dva        = true,
+      recalls    = true,
+      cvs        = false,
+      bulk       = false,
+    },
+    GetVehicleBulkDownloadURLs = {
+      name       = "GetVehicleBulkDownloadURLs",
+      handler    = "app.handler",
+      memory     = 256,
+      timeout    = 60,
+      env_vars   = {},
+      mts        = false,
+      dva        = false,
+      recalls    = false,
+      cvs        = false,
+      bulk       = true,
+    }
+  }
+}
+
+
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -37,12 +67,7 @@ module "lambda_authorizer" {
 module "lambda_functions" {
   source = "../../modules/lambda_functions"
   lambda_execution_role_arn = module.lambda_authorizer.lambda_execution_role_arn
-  lambda_configs = {
-    POST    = { function_name = "postFunction", handler = "index.post", runtime = "nodejs14.x", execution_role_arn = "arn:aws:iam::123456789012:role/postRole", lambda_zip_path = "./post.zip", env_variables = {} },
-    READ    = { function_name = "readFunction", handler = "index.read", runtime = "nodejs14.x", execution_role_arn = "arn:aws:iam::123456789012:role/readRole", lambda_zip_path = "./read.zip", env_variables = {} },
-    DELETE  = { function_name = "createFunction", handler = "index.create", runtime = "nodejs14.x", execution_role_arn = "arn:aws:iam::123456789012:role/createRole", lambda_zip_path = "./delete.zip", env_variables = {} },
-    PUT  = { function_name = "createFunction", handler = "index.put", runtime = "nodejs14.x", execution_role_arn = "arn:aws:iam::123456789012:role/createRole", lambda_zip_path = "./put.zip", env_variables = {} }
-  }
+  app_lambdas = local.app_lambdas
 }
 
 
@@ -53,6 +78,7 @@ module "api_gateway" {
   lambda_authorizer_arn   = module.lambda_authorizer.lambda_function_arn
   lambda_authorizer_execution_role_arn = module.lambda_authorizer.lambda_execution_role_arn
   lambda_function_uris = module.lambda_functions.lambda_arns
+  app_lambdas = local.app_lambdas
 }
 
 
