@@ -21,3 +21,19 @@ variable "lambda_function_uris" {
   type        = map(string)
   default     = {}
 }
+
+variable "app_lambdas" {
+  description = "Lambda configurations passed from the environment"
+  type = map(object({
+    name       = string
+    handler    = string
+    memory     = number
+    timeout    = number
+    env_vars   = map(string)
+    mts        = bool
+    dva        = bool
+    recalls    = bool
+    cvs        = bool
+    bulk       = bool
+  }))
+}

@@ -1,5 +1,5 @@
 resource "aws_lambda_function" "this" {
-  for_each = var.lambda_configs
+  for_each = local.lambda_configs
 
   function_name = each.value.function_name
   handler       = each.value.handler
@@ -10,16 +10,18 @@ resource "aws_lambda_function" "this" {
   environment {
     variables = each.value.env_variables
   }
+
 }
 
-variable "lambda_configs" {
-  description = "Map of configuration values for each Lambda function"
-  type = map(object({
-    function_name      = string
-    handler            = string
-    runtime            = string
-    lambda_zip_path    = string
-    env_variables      = map(string)
-  }))
-  default = {}
+
+locals {
+  lambda_configs = {
+    for key, value in var.app_lambdas : key => {
+      function_name   = value.name,
+      handler         = value.handler,
+      runtime         = "nodejs14.x",  # This value is hardcoded. Modify if required.
+      lambda_zip_path = "./code.zip",  # Provide the appropriate zip path.
+      env_variables   = value.env_vars
+    }
+  }
 }
