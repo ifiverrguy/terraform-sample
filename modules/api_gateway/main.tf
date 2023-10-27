@@ -91,7 +91,7 @@ resource "aws_api_gateway_method" "method" {
 
   rest_api_id   =  aws_api_gateway_rest_api.example.id
   resource_id   = each.value.id
-  http_method   = "POST"
+  http_method  = "POST"
   authorization = "CUSTOM"
   authorizer_id = aws_api_gateway_authorizer.lambda_authorizer.id
 }
@@ -105,7 +105,5 @@ resource "aws_api_gateway_integration" "integration" {
 
   integration_http_method = "POST"
   type                    = "AWS_PROXY"
-  uri                     = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/${var.lambda_function_uris[each.key]}/invocations"
+  uri = "arn:aws:apigateway:${data.aws_region.current.name}:lambda:path/2015-03-31/functions/${var.lambda_function_uris[each.key]}/invocations"
 }
-
-

@@ -17,23 +17,12 @@ variable "lambda_authorizer_execution_role_arn" {
 }
 
 variable "lambda_function_uris" {
-  description = "Map of Lambda function ARNs for integration with API Gateway"
+  description = "Map of Lambda function URIs"
   type        = map(string)
-  default     = {}
 }
+
 
 variable "app_lambdas" {
   description = "Lambda configurations passed from the environment"
-  type = map(object({
-    name       = string
-    handler    = string
-    memory     = number
-    timeout    = number
-    env_vars   = map(string)
-    mts        = bool
-    dva        = bool
-    recalls    = bool
-    cvs        = bool
-    bulk       = bool
-  }))
+  type= any
 }
