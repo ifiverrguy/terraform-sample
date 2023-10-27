@@ -75,16 +75,4 @@ variable "waf_countries_allowed" {
 
 variable "app_lambdas" {
   description = "Configuration for app lambdas"
-  type = map(object({
-    name      = string
-    handler   = string
-    memory    = number
-    timeout   = number
-    env_vars  = map(string)
-    mts       = bool
-    dva       = bool
-    recalls   = bool
-    cvs       = bool
-    bulk      = bool
-  }))
 }

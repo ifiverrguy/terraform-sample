@@ -1,5 +1,4 @@
 
-
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -34,12 +33,27 @@ module "lambda_authorizer" {
 }
 
 
-
-
 module "lambda_functions" {
-  source = "../../modules/lambda_functions"
-  lambda_execution_role_arn = module.lambda_authorizer.lambda_execution_role_arn
-  app_lambdas = var.app_lambdas
+  source  = "terraform-aws-modules/lambda/aws"
+  version = "6.0.1"
+  for_each = var.app_lambdas
+  
+  function_name = each.value.name
+  handler       = each.value.handler
+  runtime       = each.value.runtime
+  memory_size   = each.value.memory
+  timeout       = each.value.timeout
+  source_path   = each.value.filename
+
+  # You might need to adjust this depending on how the module expects environment variables:
+  environment_variables = each.value.env_vars
+
+  # ... other parameters like policies or roles if needed ...
+}
+
+
+locals {
+  lambda_arn_map = { for key, value in module.lambda_functions : key => value.lambda_function_arn }
 }
 
 
@@ -49,8 +63,6 @@ module "api_gateway" {
   api_gateway_stage_name = "dev"
   lambda_authorizer_arn   = module.lambda_authorizer.lambda_function_arn
   lambda_authorizer_execution_role_arn = module.lambda_authorizer.lambda_execution_role_arn
-  lambda_function_uris = module.lambda_functions.lambda_arns
+  lambda_function_uris = local.lambda_arn_map
   app_lambdas  = var.app_lambdas
 }
-
-
