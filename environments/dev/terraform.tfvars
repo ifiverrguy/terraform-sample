@@ -10,3 +10,73 @@ waf_countries_allowed = ["US", "CA"]
 environment            = "dev"
 environment_short_name = "dev"
 
+
+### app_lambdas ################################################################################
+app_lambdas = {
+  EnhancedGetVehicleByRegistration = {
+    name     = "EnhancedGetVehicleByRegistration",
+    handler  = "app.handler",
+    memory   = 256,
+    timeout  = 60,
+    env_vars = {},
+    mts      = true,
+    dva      = true,
+    recalls  = true,
+    cvs      = false,
+    bulk     = false,
+    runtime  = "nodejs14.x"
+    http_method = "POST"
+    filename      = "./code.zip"
+   
+  },
+   EnhancedGetVehicleByApple = {
+    name     = "EnhancedGetVehicleByApple",
+    handler  = "app.handler",
+    memory   = 256,
+    timeout  = 60,
+    env_vars = {},
+    mts      = true,
+    dva      = true,
+    recalls  = true,
+    cvs      = false,
+    bulk     = false,
+    runtime  = "nodejs14.x"
+    http_method = "PUT"
+    filename      = "./code.zip"
+   
+  },
+   EnhancedGetVehicleByMango = {
+    name     = "EnhancedGetVehicleByMango",
+    handler  = "app.handler",
+    memory   = 256,
+    timeout  = 60,
+    env_vars = {},
+    mts      = true,
+    dva      = true,
+    recalls  = true,
+    cvs      = false,
+    bulk     = false,
+    runtime  = "nodejs14.x"
+    http_method = "GET"
+    filename      = "./code.zip"
+   
+  },
+   EnhancedGetVehicleByGrapes = {
+    name     = "EnhancedGetVehicleByGrapes",
+    handler  = "app.handler",
+    memory   = 256,
+    timeout  = 60,
+    env_vars = {},
+    mts      = true,
+    dva      = true,
+    recalls  = true,
+    cvs      = false,
+    bulk     = false,
+    runtime  = "nodejs14.x"
+    http_method = "POST"
+    filename      = "./code.zip"
+   
+  }
+  
+  
+}

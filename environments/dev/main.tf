@@ -1,4 +1,9 @@
 
+provider "aws" {
+  region = "us-east-1"
+  profile = "ifeoluwa2008"
+}
+
 module "vpc" {
   source = "../../modules/vpc"
 
@@ -9,6 +14,7 @@ module "vpc" {
   private_subnet_a_cidr = var.private_subnet_a_cidr
   private_subnet_b_cidr = var.private_subnet_b_cidr
 }
+
 module "dynamodb_table" {
   source = "../../modules/dynamodb"
 
@@ -25,12 +31,13 @@ module "lambda_authorizer" {
   function_name     = "customLambdaAuthorizer"
   handler           = "index.handler"
   runtime           = "nodejs14.x"
-  lambda_zip_path   = "./code.zip"
+  lambda_zip_path   = "./authorizer.zip"
   env_variables     = {
     DUMMY_KEY1 = "dummy_value1",
     DUMMY_KEY2 = "dummy_value2"
   }
 }
+
 
 
 module "lambda_functions" {
@@ -43,12 +50,12 @@ module "lambda_functions" {
   runtime       = each.value.runtime
   memory_size   = each.value.memory
   timeout       = each.value.timeout
-  source_path   = each.value.filename
+  create_package         = false
+  local_existing_package   = each.value.filename
 
   # You might need to adjust this depending on how the module expects environment variables:
   environment_variables = each.value.env_vars
 
-  # ... other parameters like policies or roles if needed ...
 }
 
 
