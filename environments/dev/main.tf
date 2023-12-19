@@ -15,15 +15,6 @@ module "vpc" {
   private_subnet_b_cidr = var.private_subnet_b_cidr
 }
 
-module "dynamodb_table" {
-  source = "../../modules/dynamodb"
-
-  table_name     = var.table_name
-  billing_mode   = "PROVISIONED"
-  read_capacity  = var.read_capacity
-  write_capacity = var.write_capacity
-  hash_key       = var.hash_key
-}
 
 
 module "lambda_authorizer" {
